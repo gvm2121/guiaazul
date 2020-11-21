@@ -1,0 +1,71 @@
+{% extends "facturas/base.html"%}
+
+{% block contenido %}
+
+<div class="row mt-xl-2">
+ <div class="col-sm-3 col-xl-6"> <h1>¿Qué falta en cada sucursal?</h1></div>
+ <div class="col-sm-3 col-xl-6 "> 
+    <a href="" class="btn btn-primary">Actualizar</a>
+ 
+ </div>
+ 
+</div>
+<div class="row">
+<div class="col">Última actualización : {{ u_f }}</div>
+</div>
+
+
+{% for k in faltantes%}
+
+<div class="card my-lg-2 my-2">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#{{ k.nombre_sucursal }}" aria-expanded="false" aria-controls="{{ k.nombre_sucursal }}">
+          {{ k.nombre_sucursal }} - {{k.cantidad_faltante}}
+        </button>
+      </h5>
+    </div>
+
+ 
+ <div id="{{ k.nombre_sucursal }}" class="collapse" aria-labelledby="headingTwo" data-parent="#{{ k.nombre_sucursal }}">
+      <div class="card-body">
+      <div class="col-md-4"><a class="btn btn-warning" href="analisis_sucursal/exportar_csv/{{ k.nombre_sucursal }}">exportar csv </a></div>
+            <ul>
+            {% for r in k.falta %}
+            <li>{{ r.bosa }}-{{ r.isbn }}-{{ r.nombre }}_(St: {{ r.saldo_bodega}}) </li>
+            {% endfor %}
+            </ul>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
+
+
+{% block metajs %}
+
+
+ <script type="text/javascript">
+    
+    
+    
+    $( document ).ready(function() {
+           
+       
+        
+       $(".dropdown-item").click( function() {
+          var suc = $(this).attr("value");
+          var dir="datos-grafico/" + suc;
+          var nom=$(this).text();
+          $("#boton_selector").text(nom);
+            
+          
+          
+          drawChartEdad(dir); });
+          });
+    
+    </script>
+
+{% endblock %}

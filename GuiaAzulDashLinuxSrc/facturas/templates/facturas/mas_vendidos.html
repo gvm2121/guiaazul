@@ -1,0 +1,32 @@
+{% extends "facturas/base.html" %}
+
+{% block metajs %}
+
+
+{% endblock %}
+
+
+{% block contenido %}
+<h2>Más vendidos históricos por sucursal:</h2>
+<p>Selección de sucursal</p>
+<div class="row">
+
+   <div class="dropdown col-xl-6">
+    <button id="boton_selector_1" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sucursales
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        {% for tienda in tiendas %}
+     
+      <li><a class="dropdown-item" href="{% url 'mas_vendidos_salida' tienda.id %}" target='_blank'>{{tienda.nombre}}</a></li>
+       {% endfor %}
+    </ul>
+    </div>
+                       
+                                        
+</div>
+
+
+
+
+
+{% endblock  %}

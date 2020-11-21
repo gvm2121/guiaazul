@@ -1,0 +1,325 @@
+{% extends "facturas/base.html" %}
+{% load humanize %}
+
+
+  {% block metajs %}
+
+        <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart','line']});
+      google.charts.setOnLoadCallback(drawChart5);
+
+      function drawChart5() {
+        var data = new google.visualization.DataTable();
+        var chartDiv = document.getElementById('ventas_liquidaciones');
+      data.addColumn('date', 'Month');
+      data.addColumn('number', 'Cantidad Vendidad');
+      data.addColumn('number', 'Monto Neto');
+
+      data.addRows([
+        {% for ventas in ventas_historicas %}
+        [new Date('{{ventas.f | safe}}'),{{ventas.ve}},{{ventas.s}}],
+        {% endfor %}
+      ]);
+
+    var materialOptions = {
+        chart: {
+          title: 'Ventas netas vs cantidad de libros venididos (ventas)'
+        },
+        width: 1200,
+        height: 800,
+        series: {
+          // Gives each series an axis name that matches the Y-axis below.
+          0: {axis: 'Monto',targetAxisIndex:0},
+          1: {axis: 'Cantidad',targetAxisIndex:1}
+        },
+        axes: {
+          // Adds labels to each axis; they don't have to match the axis names.
+          y: {
+            Monto: {label: 'Monto Neto'},
+            Cantidad: {label: 'Cantidad vendida'},
+            
+          },
+        },
+        vAxis:{
+        1:{     title:'hola',
+                maxValue:600,
+                viewWindow:{min:0,max:600},
+                },
+        
+        }
+      };
+          
+        
+        function drawMaterialChart() {
+        var materialChart = new google.visualization.LineChart(ventas_liquidaciones);
+        materialChart.draw(data, materialOptions);
+        
+      }
+
+      drawMaterialChart();
+
+       };
+          
+      
+    </script>
+
+    
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart','line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([['FECHA','MONTO NETO','UTILIDAD','FLOTACION'],
+        {% for factura in facturas %}
+        ['{{ factura.fecha | safe }}',{{ factura.m | safe }},{{ factura.u | safe }},{{ factura.id | safe }}],
+        {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Ventas Guia Azul (Facturas)',
+          curveType: 'none',
+          pointSize:'4',
+          legend: { position: 'bottom' },
+          animation:{duration: 500,easing: 'out',startup:true},
+          vAxis:{format:'currency'},
+          hAxis:{titleTextStyle: {color: '#FF0000'}, gridlines:{color: '#333333', count: -1}
+          }
+          
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('ventas'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    
+    <script type="text/javascript">
+    <!-- esta es for tiempo -->
+      google.charts.load('current', {'packages':['corechart','line']});
+      google.charts.setOnLoadCallback(historico_sucursal);
+         
+        
+      function historico_sucursal(dir_2) { 
+        
+        var jsonData_2 = $.ajax({url: dir_2 ,dataType: "json",async: false}).responseText;
+          
+      // Create our data table out of JSON data loaded from server.
+      var data2 = new google.visualization.DataTable(jsonData_2)
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.LineChart(document.getElementById('analisis_sucursal_stock_historico'));
+      chart.draw(data2);
+        
+      };
+      
+           
+    </script>
+    
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([['FECHA','STOCK','VENTA'],
+{% for s in stock_mercado %}
+['{{ s.fecha | safe }}',{{ s.c | safe }},{{ s.ve | safe }}],
+{% endfor %}
+        ]);
+
+        var options = {
+          title: 'STOCK EN EL MERCADO',
+          curveType: 'none',
+          legend: { position: 'bottom' },
+          animation:{duration: 500,easing: 'out',startup:true},
+          
+          
+          
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('stock_mercado'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    
+    <script type="text/javascript">
+         
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChartEdad);
+         
+        
+      function drawChartEdad(dir) {
+        
+        
+        
+        
+        var jsonData = $.ajax({ url: dir ,dataType: "json",async: false}).responseText;
+        
+          
+      // Create our data table out of JSON data loaded from server.
+      var data = new google.visualization.DataTable(jsonData);
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.PieChart(document.getElementById('edad'));
+      chart.draw(data);
+        
+      };
+      
+           
+    </script>
+    
+    
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['SUCURSAL', 'SALDO','VENTA'],
+          {% for stock in stock_por_tiendas %}
+           ['{{ stock.nombre_sucursal | safe }} ({{ stock.sucursal | safe}})', {{ stock.saldo | safe }},{{ stock.venta | safe }}],
+          {% endfor %}
+          
+          
+          
+        ]);
+
+        var options = {
+           title: 'Cantidad de libros por tienda',
+            bars: 'horizontal',// Required for Material Bar Charts.
+            annotations: {
+          alwaysOutside: true,
+          textStyle: {
+            fontSize: 10,
+            auraColor: 'none',
+            color: '#555'
+          },
+        }
+                };
+        var chart = new google.charts.Bar(document.getElementById('cantidad_tienda'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      
+      }
+    </script>
+        <script type="text/javascript">         
+       
+        
+       $("a#torta.dropdown-item").click( function() {
+          var suc = $(this).attr("value");
+          var dir="datos-grafico/" + suc;   
+          var nom=$(this).text();
+          $("#boton_selector").text(nom);         
+          drawChartEdad(dir); 
+          });
+          
+          
+        $("a#selector_hist_2.dropdown-item").click( function() {
+            
+          var suc_2 = $(this).attr("value");
+          var dir_2="datos-grafico-historico/" + suc_2;   
+          var nom=$(this).text();
+          $("#boton_selector_2").text(nom);
+           historico_sucursal(dir_2);
+          });
+          
+          $(function(){
+          var suc_2=100;
+          var suc=0;
+          var dir_2="datos-grafico-historico/" + suc_2;
+          var dir="datos-grafico/" + suc;  
+           drawChartEdad(dir); 
+           historico_sucursal(dir_2);
+         
+
+          });
+     
+         
+    
+    </script>
+    
+      {% endblock %}
+      
+ 
+  
+
+
+
+    {% block contenido %}
+
+
+<div class="d-flex justify-content-center my-3">
+    <a href="{% url 'actualizar_ventas' %}"type="button" class="btn btn-success">Actualizar Ventas</a>
+</div>
+
+<div class="row">
+   
+    <div id="ventas" style="width: 1200px; height: 500px"></div>
+
+</div>
+<div class="row">
+
+<div id="ventas_liquidaciones"></div>
+</div>
+
+<div class="row">
+    <div id="stock_mercado" style="width: 1200px; height: 500px"></div>
+    </div>
+<div class="row">
+
+                       <div class="dropdown col-xl-6">
+                        <button id="boton_selector" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sucursales
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" id="torta" value="0">Todo</a></li>
+                            {% for tienda in tiendas %}
+                         
+                          <li><a class="dropdown-item" id="torta" value="{{tienda.id}}">{{tienda.nombre}}</a></li>
+                           {% endfor %}
+                        </ul>
+                        </div>
+                       
+                                        
+</div>
+    
+ <div id="edad" style="width: 1200px; height: 500px"></div>
+ <div class="row">
+ <div class="dropdown col-xl-6">
+                         <button id="boton_selector_fechas2" class="btn btn-primary dropdown-toggle " type="button" data-toggle="dropdown">Fechas_contables
+                         <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                         <li><a class="dropdown-item" value="0">Fechas_contables</a></li>
+                         <li><a class="dropdown-item" value="0">Fechas_contables</a></li>
+                         <li><a class="dropdown-item" value="0">Fechas_contables</a></li>
+                         <li><a class="dropdown-item" value="0">Fechas_contables</a></li>
+                        
+                        
+                        </ul>
+                        
+                        
+                        
+                        </div>
+ </div>  
+<div class="row">
+    <div id="cantidad_tienda" style="width: 1200px; height: 1500px"></div>
+</div>
+<div class="row">
+
+                       <div class="dropdown col-xl-6">
+                        <button id="boton_selector_2" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sucursales
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            
+                            {% for tienda in tiendas %}
+                         
+                          <li><a class="dropdown-item" id="selector_hist_2" value="{{tienda.id}}">{{tienda.nombre}}</a></li>
+                           {% endfor %}
+                        </ul>
+                        </div>
+                       
+                                        
+</div>
+
+
+{% endblock %}
+ 

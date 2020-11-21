@@ -1,0 +1,67 @@
+{% extends "facturas/base.html" %}
+
+{% block contenido %}
+
+{% for s in sucursal %}
+<h1>{{s.nombre}}</h1>
+{% endfor %}
+
+
+
+
+ <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">ISBN</th>
+      <th scope="col">TITULO</th>
+      <th scope="col">ENVIADOS</th>
+      <th scope="col">VENDIDOS</th>
+      <th scope="col">SALDO</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in encuadre %}
+  
+    <tr>
+      <th scope="row">1</th>
+      <td>{{ e.isbn }}</td>
+      <td>{{ e.titulo }}</td>
+      <td>{{ e.enviados }}</td>
+      <td>{{e.vendidos}}</td>
+      <td>{{e.saldo}}</td>
+           
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+<div class="row">
+<p>Ultimos envíos</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">FOLIO</th>
+      <th scope="col">FECHA</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+
+{% for u in ultimos_envios %}
+<tr>
+      <th scope="row">1</th>
+      <td>{{u.numero_guia_factura  }}</td>
+      <td>{{ u.fecha }}</td>
+    
+    </tr>
+
+{% endfor %}
+
+
+
+</div>
+            
+{% endblock %}

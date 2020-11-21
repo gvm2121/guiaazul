@@ -1,0 +1,52 @@
+{% extends "facturas/base.html" %}
+
+
+ {% block metajs %}
+ 
+ <script type="text/javascript">         
+       google.charts.load('current', {'packages':['treemap']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
+          ['Importados',    null,                 {{impo | safe}},                               0],
+          ['liquidados',   'Importados',             {{liquidaciones | safe }},                               0],
+          ['eliminados',    'Importados',             {{eliminados | safe }},                               0],
+          ['en tiendas',      'Importados',             {{tiendas | safe }},                               0],
+          ['bodega valorizada', 'Importados',             {{bodega_valorizada | safe }},                               -10],
+          
+        ]);
+
+        tree = new google.visualization.TreeMap(document.getElementById('arbol'));
+
+        tree.draw(data, {
+          minColor: '#f00',
+          midColor: '#ddd',
+          maxColor: '#0d0',
+          headerHeight: 15,
+          fontColor: 'black',
+          showScale: true
+        });
+
+      }
+    </script>
+
+</script>
+ 
+ {% endblock %}
+
+  {% block contenido %}
+  
+<h1>importados : {{impo}}</h1>
+<h1>liquidados : {{liquidaciones}}</h1>
+<h1>eliminados : {{eliminados}}</h1>
+<h1>bodega : {{bodega_valorizada}}</h1>
+<h1>en tiendas : {{tiendas}}</h1>
+
+<h2>fecha maxima de liquidacion: {{fecha}}</h2>
+
+<div id="arbol" style="width: 900px; height: 500px;"></div>
+
+<h1>Revisar el grafico</h1>
+  
+  {% endblock %}

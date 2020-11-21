@@ -1,0 +1,18 @@
+{% extends "prueba.html" %}
+{% load staticfiles %}
+
+	
+{% block centro %}
+        {% if error %}
+        
+        <h3 class="bg-danger">Hay un error en los datos que ingresaste, puede ser en el email o falta algo.</h3>
+        
+        {% else%}
+           
+		<h3 class="bg-success">¡Muchas gracias!, nos contactaremos a la brevedad.</h3>
+		
+        
+        {% endif %}
+		
+		
+{% endblock %}

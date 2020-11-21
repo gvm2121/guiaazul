@@ -1,0 +1,106 @@
+{% extends "facturas/base.html" %}
+
+{% block metajs %}
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(Edad_stock_bodega);
+
+      function Edad_stock_bodega() {
+
+        var data = google.visualization.arrayToDataTable([['EDICION','CANTIDAD'],
+        {% for edad in edad_stock_bodega %}
+            ['{{edad.edi|safe}}',{{edad.s|safe}}],
+         {% endfor %}
+              
+        ]);
+         
+
+        var options = {
+          title: 'Edad Stock Bodega'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data,options);
+      }
+      
+           
+    </script>
+
+
+
+
+{% endblock %}
+
+{% block contenido %}
+
+<strong>Pendiente, pensar cómo asociar ubicación</strong>
+<div class="d-none d-lg-block">
+<div class="row justify-content-xl-center">
+
+<div id="piechart" style="width: 900px; height: 500px;" ></div>
+</div>
+</div>
+<br>
+<div class="row">
+<p class="col-lg-12 col-sm-4">STOCK BODEGA</p>  
+</div>
+<div class="row">
+            <div class="col-xl-8"> <p>Ultima actualización : {{ k }}</p> </div>
+            <div class="col-xl-2 text-center my-2"><a class="btn btn-warning" href="stock/csv_stock">exportar csv </a>  </div>
+            <div class="col-xl-2 text-center my-2 "><a class="btn btn-success" href="stock/buscalibre">buscalibre </a>  </div>
+</div>
+<br>
+
+<div class="row ">
+
+<div class="table-responsive ">
+<table class="table table-striped">
+        <thead> <tr> <th scope="col">ISBN</th> <th scope="col">NOMBRE</th><th scope="col">EDICION</th><th scope="col">STOCK</th></tr></thead> 
+<tbody>
+            {% for stock in stock_bodegas %}    
+
+            <tr>
+
+<th scope="row"><a href="{% url 'ubicacion_stock' stock.field_isbn %}" target=_blank>{{stock.field_isbn}}</a></th> <td>{{stock.field_titulo}}</td><td>{{stock.field_edicion}}</td><td>{{stock.stock}}</td></tr>
+           {% endfor %}
+</tbody>
+           
+           </table>
+</div>
+
+</div>
+
+<div class="row">   
+<p>Ultimas Guías enviadas:</p>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+    <tr> 
+            <th scope="col">Folio</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Destino</th>
+    </tr>
+ </thead>
+ <tbody>
+        {% for u in ultimas_guias %}
+        <tr>
+            <th scope="row">{{u.num}}</th> 
+            <th scope="row">{{u.f}}</th>
+            <th scope="row">{{u.d}}</th>
+        </tr>
+           
+        {% endfor %}
+</tbody>
+
+
+</table>
+
+
+
+</div>
+</div>
+
+
+{% endblock  %}

@@ -1,0 +1,45 @@
+{% extends "facturas/base.html" %}
+
+
+  {% block metajs %}
+<script type="text/javascript">         
+        $("a#selectorfechas.dropdown-item").click( function() {
+          var nom=$(this).text();
+          $("#selectorfechasprincipal").text(nom); 
+          });
+
+</script>
+
+  
+  {% endblock %}
+  
+      {% block contenido %}
+      
+      
+      <div class="row mt-lg-5 mb-lg-5">
+      <p>Lo que hace esta página, es ver si todas las sucursales tuvieron facturación y hacer un match entre la venta informada y la factura correcta</p>
+      <div class="col-lg-4"><leader>Seleccione fecha:</leader></div>
+      <div class="col-lg-4">
+      <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="selectorfechasprincipal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Fechas
+              </button>
+              <div class="dropdown-menu" aria-labelledby="selectorfechas">
+                {% for fecha in fechas %}
+                <a class="dropdown-item" id="selectorfechas" href="{% url 'validador_facturas_salida' fecha.fecha %}" target="_blank">{{fecha.fecha}}</a>
+                {% endfor %}
+              </div>
+    </div>
+     </div>
+     </div>
+
+     
+     
+      
+
+      
+      
+      
+      
+      
+      {% endblock %}

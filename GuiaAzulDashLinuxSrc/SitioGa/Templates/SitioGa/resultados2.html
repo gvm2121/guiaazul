@@ -1,0 +1,23 @@
+<utf-8>
+{% if libros %}
+<p>Libros encontrados: {{ libros|length }} libro {{ libros|pluralize }}.</p>
+<table style="width:20%" border="3">
+<tr>
+<td>nombre </td>
+<td>edicion</td>
+<td>stock</td>
+</tr>
+{% for libros in libros %}
+<tr>
+<td>{{ libros.nombre }}</td>
+<td>{{ libros.edicion }}</td>
+<td>{{ libros.stock }}</td>
+{% endfor %}
+</tr>
+</table>
+
+
+{% else %}
+<p>Ningún libro coincide con el criterio de búsqueda.</p>
+{% endif %}
+</utf-8>

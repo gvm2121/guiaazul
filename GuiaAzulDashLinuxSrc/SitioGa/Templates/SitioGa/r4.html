@@ -1,0 +1,66 @@
+{% extends "SitioGa/prueba.html" %}
+{% load staticfiles %}
+
+
+{% block seo %}
+
+<meta name="description" content="{{ejemplar.seometa}}"/>
+<title>viajes-Guia-Azul-{{ejemplar.nombre}}-{{ejemplar.edicion}}</title>
+
+{%endblock%}
+
+
+
+
+{% block centro %}
+	<div class="col-lg-5">	
+		
+		<div class="row mx-auto" >
+		
+            <img src="{% static 'SitioGa/imagenes' %}/{{ejemplar.foto }}" height="250" width="150"  class="img-responsive ml-4 my-4"></img> 
+			
+			
+		</div>
+            <div class="row px-4">
+                    <table class="table">
+                    <section id="{{ejemplar.isbn}}">
+                    <tr><td>NOMBRE:</td><td><p>{{ejemplar.nombre}} {{ ejemplar.edicion}}</p></td></tr>
+                    <tr><td>STOCK:</td><td>{{ejemplar.stock}}</td></tr>
+                    <tr><td>PAGINAS:</td><td>{{ejemplar.paginas}}</td></tr>
+                    <tr><td>PRECIO:</td><td>{{ejemplar.pvp}} CLP</td></tr>
+                    <tr><td>OBSERVACION:</td><td>{% if ejemplar.contenido  %}
+                    Tenemos un indice referencial para que 
+                    veas los contenidos de la guia. Lo actualizaremos a medida que contemos con la información. <br> 
+                    <a href="{% static 'indice' %}/{{ejemplar.contenido}}" onclick="ga('send','event','descarga','{{ejemplar.nombre}}')" type="button" class="btn btn-primary mt-2" >Descargar índice</a> 
+                    {% else %} Perdón, no tenemos indice todavía 
+                    {% endif %} <br> 
+                    {% if ejemplar.ofbool %} 
+                    <div class="alert alert-info" style="margin-top:10px;">Producto en oferta {% endif %}</div></td></tr>
+                    <tr><td>
+                    <form action="{% url 'agregar' %}" method="post">
+                    {% csrf_token %}
+                    
+                    {{formulario_cantidad}}
+                    
+                    <tr><td><button class="btn btn-warning my-2">Agregar al carro</button></td></tr>
+                    </form>
+                    {% if mensaje %}
+                    <ul class="messages">
+                        {% for m in mensaje %}
+                        
+                        <div class="alert alert-success" role="alert">{{ m }}</div>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    </td></tr>
+                    </section>	
+                    </table>
+            </div>
+	</div>
+
+		
+{% endblock %}
+
+
+
+

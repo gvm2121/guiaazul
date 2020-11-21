@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% load i18n admin_static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+        <meta charset="utf-8">
+        <title>*** SUBIR ARCHIVO***</title>
+        
+</head>
+{% block content %}
+<body>
+<div class="row">
+Bajar csv tipo 
+<form enctype="multipart/form-data" method='post' action="">{% csrf_token %}
+					{{form.as_p}}
+					<input type="submit" style="margin-top:15px;" class="btn btn-success" value="Actualizar">
+					
+</form>
+<h2>consideraciones:</h2>
+<ul>hay que guardar el csv como utf-8 con editor de texto comun y corriente</ul>
+<ul>los campos son con minusculas y SIEMPRE debe ir el isbn</ul>
+
+{%for campo in campos%}
+<li>{{campo}}</li>
+{%endfor%}
+<br>
+ 
+
+ {% for h in archivo.fieldnames %}
+       {% for x,y in objeto_nuevo %}
+       
+         {{h}}
+       
+       {% endfor %}
+ {% endfor %}
+
+
+
+<h1>{{status}}</h1>
+ </body>
+ {%endblock%}
+ </html>
+ 
+ </div>

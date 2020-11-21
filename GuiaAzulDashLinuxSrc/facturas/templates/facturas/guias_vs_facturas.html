@@ -1,0 +1,40 @@
+{% extends "facturas/base.html"%}
+
+{% block contenido%}
+<div class="row">
+<h1>Esta función hace el encuadre entre las guías enviadas total y las ventas total</h1>
+</div>
+<div class="row">
+ <div class="dropdown col-xl-6">
+                         <button id="boton_selector_fechas2" class="btn btn-primary dropdown-toggle " type="button" data-toggle="dropdown">Seleccione sucursal<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                        {% for sucursal in sucursales %}
+                         <li><a class="dropdown-item" href="{% url 'guias_vs_facturas_salida' sucursal.id %}" target="_blank">{{sucursal.nombre}}</a></li>
+                         
+                        {% endfor %}
+                        
+                        </ul>
+                        
+                        
+                        
+                        </div>
+</div>
+
+
+{% endblock %}
+
+{% block metajs %}
+<script type="text/javascript">
+
+$(function() {
+  $("#firstname").autocomplete({
+    source: "busqueda",
+       
+  });
+});
+
+
+    </script>
+{% endblock %}
+
+

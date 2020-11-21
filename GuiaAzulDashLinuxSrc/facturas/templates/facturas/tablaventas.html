@@ -1,0 +1,104 @@
+{% extends "facturas/base.html" %}
+
+
+{% block metajs %}
+
+<script type="text/javascript">
+ {% for f in VentasFormSet2 %}
+
+
+$(function() {
+  $("#{{f.descripcion.id_for_label}}").autocomplete({
+    source: "busqueda_isbn",
+    select:function(event,ui){
+    $("#{{f.isbn.id_for_label}}").val( ui.item.desc );
+        
+    }
+         
+  });
+});
+       
+ 
+{% endfor %}
+
+    </script>
+{% endblock %}
+
+
+
+{% block contenido %}
+
+<div class="row">
+<div class="col-xl-12 offset-xl-1">
+<h1>Ingreso de ventas para sucursales no tradicionales</h1>
+<p>Ahora viene incluir los datos correctos en la tabla. En formulario está funcionando bien.</p> 
+</div>
+<br><br>
+</div> 
+
+
+<div class="row justify-content-xl-center border rounded">
+    <div class="col-xl-6">
+                                <form action="{% url 'tablaventas_recibo' %}" method="post">
+ 
+                                {% csrf_token %}
+
+                                    <div class="form-group">
+                                            <label for="{{formulario.cod_sucursal.name }}">{{formulario.cod_sucursal.label}}</label>
+                                            <select name="{{formulario.cod_sucursal.id_for_label}}" class="custom-select form-control">
+                                            <option selected>Elija...</option>
+                                            {% for opciones in formulario.cod_sucursal %}
+                                            {{opciones}}
+                                            {% endfor %}
+
+                                            </select>
+                                     </div>
+                                       
+
+                                <div class="form-group">
+                                <label for="{{formulario.fecha_contable.name}}">{{formulario.fecha_contable.label}}</label>
+                                    {{formulario.fecha_contable}}
+
+                                </div>
+
+    </div> 
+</div>
+<div class="row" style="height: 100px;"></div>
+<div class="row">
+<div class="col-xl-10 ">
+            
+            {{ VentasFormSet2.management_form }}
+             {% for f in VentasFormSet2 %}
+             <div class="form-row border rounded border-primary">
+              <div class="form-group col-xl-12">
+             <label for="{{f.descripcion.id_for_label}}">titulo</label>
+             {{f.descripcion}}
+            </div>
+             <div class="form-group col-xl-6">
+             
+             <label for="{{f.isbn.id_for_label}}">isbn</label>
+             {{ f.isbn }}
+             </div>
+             <div class="form-group col-xl-6">
+             <label for="{{f.venta.id_for_label}}">Venta</label>
+             {{f.venta}}
+            </div>
+           
+            </div>
+            <br>
+             {% endfor %}
+</div>
+<div class="col-xl-2 text-xl-center"><button type="submit" class="btn btn-info" label="Agregar">Agregar</button>
+
+</div>
+</div>
+
+
+
+</form>
+
+
+
+
+{% endblock %}
+

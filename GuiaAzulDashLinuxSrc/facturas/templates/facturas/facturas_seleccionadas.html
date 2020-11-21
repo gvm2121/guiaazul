@@ -1,0 +1,67 @@
+{% extends "facturas/base.html" %}
+
+{% block metajs %}
+{% endblock %}
+
+
+{% block contenido %}
+
+
+
+<div class="row">
+    <div class="row" style="height: 100px;"></div>   
+    <div class="row justify-content-md-center"> 
+     <div class="col-xl-6 align-middle"><h3> Total adeudado : {{ sumas }}</h3><br><h4>Última actualización :{{ultima_act}}</h4> </div> 
+     <div class="col-xl-6 text-center align-middle"><a class="btn btn-warning" href='{% url "exportar_facturas_impagas_csv" %}'>exportar csv </a>  </div>
+    
+    </div>
+    <br>
+    <br>
+      
+   
+    <div class="row" >  
+                <table class="table table-striped">
+                <thead> 
+                <tr>
+              
+                <th scope="col">folio</th>
+               
+                <th scope="col">FECHA DE VENCIMIENTO</th>
+                <th scope="col">DIRECCIÓN</th>
+                
+                
+                <th scope="col">MONTO TOTAL</th>
+                
+                <th scope="col">OTROS COMENTARIOS</th>
+                <th scope="col">FECHA DE PAGO aaaa-mm-dd</th>
+                </tr>
+                </thead> 
+                <tbody>
+                <form action="{% url 'facturas_actualizadas' %}" method="post" target="_blank">
+                           {% csrf_token %}
+                            {% for sel in seleccionadas %}    
+                
+                 <tr id="linea">
+       
+                <td><input name="folio" value="{{sel.folio}}" readonly></td> 
+               
+                <td>{{sel.fecha_vencimiento}}</td>
+                <td>{{sel.dirección}}</td>
+               
+                
+                <td>{{sel.monto_total }}</td>
+                
+                <td><input class="form-control" name="otros_comentarios" value="{{sel.otros_comentarios}}" ></td>
+                <td><input class="form-control" name="fecha_pago" value="{{sel.fecha_pago}}" ></td>
+                
+                 </tr>
+                           
+                
+                 {% endfor %}
+                </tbody>
+                           
+                </table>
+                <input type="submit" class="btn btn-primary" value="grabar">
+            </form>
+           </div>
+{% endblock %}

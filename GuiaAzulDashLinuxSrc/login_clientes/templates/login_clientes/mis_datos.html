@@ -1,0 +1,13 @@
+{% extends "SitioGa/prueba.html" %}
+{% load static %}
+
+{% block derecha %}
+{% endblock %}
+{% block centro %}
+        {% csrf_token %}
+        {{ datos }}
+        
+{% endblock %}
+
+{% block izquierdo %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "facturas/base.html" %}
+
+{% block contenido %}
+
+<h1>aca va la ubicacion del stock</h1>
+
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+    <tr> 
+            <th scope="col">isbn</th>
+            <th scope="col">cantidad</th>
+            <th scope="col">ubicacion</th>
+            <th scope="col">titulo</th>
+            <th scope="col">edicion</th>
+    </tr>
+ </thead>
+ <tbody>
+        {% for u in ubicacion %}
+        <tr>
+            <th scope="row">{{u.isbn}}</th> 
+            <th scope="row">{{u.cantidad}}</th>
+            <th scope="row">{{u.ubicacion}}</th>
+            <th scope="row">{{u.titulo}}</th>
+            <th scope="row">{{u.edicion}}</th>
+        </tr>
+           
+        {% endfor %}
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+
+{%endblock%}

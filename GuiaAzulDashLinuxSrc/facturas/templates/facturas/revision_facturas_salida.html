@@ -1,0 +1,43 @@
+{% extends "facturas/base.html" %}
+
+ {% block metajs %}
+   {% endblock %}
+ 
+ 
+ {% block contenido %}
+ 
+    <h2>Resultados al {{fecha}} 
+    {{ventas.liquidacion__sum}}</h2>
+    
+
+ 
+      <div class="row mt-lg-5 mb-lg-5">
+      <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Cod. sucursal</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Folio</th>
+      <th scope="col">monto neto factura</th>
+      <th scope="col">liquidacion (ventas)</th>
+      <th scope="col">fecha contable</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for tabla in tablas %}
+    <tr>
+      <th scope="row">{{ tabla.sucursal }}</th>
+      <td>{{tabla.nombre_sucursal}}</td>
+      <td>{{tabla.folio}}</td>
+      <td>{{tabla.suma_factura}}</td>
+      <td>{{tabla.suma_liquidacion}}</td>
+      <td>{{tabla.fecha_factura_contable}}</td>
+    </tr>  
+      {% endfor %}
+      </tbody>
+</table>
+      
+</div>  
+ 
+ 
+   {% endblock %}

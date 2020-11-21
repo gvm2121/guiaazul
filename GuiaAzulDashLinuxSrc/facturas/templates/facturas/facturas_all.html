@@ -1,0 +1,100 @@
+{% extends "facturas/base.html" %}
+
+{% block metajs %}
+
+<script>
+
+
+
+
+$(".form-check-input").on( 'change', function() {
+    if ($(this).is(':checked') ){
+        var x=$(this).closest( "tr" ).attr('id');
+        //var y=$(this).closest( "tr" );
+        $('#'+x).css("background-color","red");
+
+                      
+    } else {
+        var x=$(this).closest( "tr" ).attr('id');
+        $('#'+x).css("background-color","transparent");
+    }
+
+    
+});
+
+$('#tabla_resultados tr').filter(':has(:checkbox:checked)').find('td').each(function() {
+    console.log($(this).val());
+});
+
+
+
+
+
+</script>
+
+
+{% endblock %}
+
+
+{% block contenido %}
+
+
+
+<div class="row">
+    <div class="row" style="height: 100px;"></div>   
+    <div class="row justify-content-md-center"> 
+     <div class="col-xl-6 align-middle"><h3> Total adeudado Neto : {{ sumas.monto_neto__sum }}</h3>
+    <br><h4>Última actualización :{{ ultima_actualizacion }}</h4>
+    <div id="suma">0</div> 
+    </div> 
+     <div class="col-xl-6 text-center align-middle"><a class="btn btn-warning" href='{% url "exportar_facturas_impagas_csv" %}'>exportar csv </a>  </div>
+    
+    </div>
+    <br>
+    <br>
+      
+    <form action="{% url 'facturas_filtradas' %}" method="POST" target="_blank">
+            {% csrf_token %}
+    <div class="row">  
+    
+    
+                
+                <table id="tabla_resultados" class="table table-striped">
+                <thead> 
+                <tr>
+                <th scope="col">sel</th>    
+                <th scope="col">folio</th>
+                <th scope="col">MONTO EUROS</th>
+                <th scope="col">FECHA DE VENCIMIENTO</th>
+                <th scope="col">DIRECCIÓN</th>
+                <th scope="col">COD_SUCURSAL</th>
+                <th scope="col">MONTO NETO</th>
+                <th scope="col">MONTO TOTAL</th>
+                
+                </tr>
+                </thead> 
+                <tbody>
+                            {% for impaga in impagas %}    
+    
+                 <tr id="defaultCheck_{{impaga.folio}}">
+                <td> 
+                    <input class="form-check-input" type="checkbox" value="{{impaga.folio}}"   name="factura">
+                   
+                </td>
+                <td>{{impaga.folio}}</td> 
+                <td>{{impaga.monto_españa}}</td>
+                <td>{{impaga.fecha_vencimiento}}</td>
+                <td>{{impaga.dirección}}</td>
+                <td>{{impaga.cod_sucursal}}</td>
+                <td class="monto_total" value="{{impaga.monto_neto }}" name="monto_neto">{{impaga.monto_neto }}</td>
+                <td>{{impaga.monto_total }}</td>
+                 
+                 </tr>
+                           {% endfor %}
+                </tbody>
+                           
+                </table>
+            <input type="submit" class="btn btn-primary" value="filtrar">    
+            </form>         
+    </div>
+{% endblock %}
